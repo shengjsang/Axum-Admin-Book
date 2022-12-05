@@ -1,0 +1,6 @@
+[book]
+authors = ["shengj.sang"]
+language = "zh-cn"
+multilingual = false
+src = "src"
+title = "Rust-Axum-API实战"
