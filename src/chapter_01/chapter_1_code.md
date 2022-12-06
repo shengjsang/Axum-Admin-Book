@@ -6,7 +6,7 @@
 
 代码除不可以用于编写教程，其余用途都可以。
 
-```tex
+```
 The MIT License
 
 Copyright (c) 2022 Winter,  MeiYing.shop
