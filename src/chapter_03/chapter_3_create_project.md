@@ -52,11 +52,8 @@
 
 6. 创建一个Rust的可执行程序
 
-   1. 将`app`添加到项目**根目录**下的`Cargo.toml`  
-
-
-   `Cargo.toml`
-
+   1. 将`app`添加到项目**根目录**下的`Cargo.toml`   
+   
    ```toml
    [workspace]
    members = ["app"]
@@ -68,14 +65,12 @@
    publish = false
    repository = ""
    ```
-
+   
+   2. 创建项目
+   
    ```shell
    cargo new --bin app
    ```
-
-   ![image-20221206171035381](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221206171035381.png)
-
-   ![image-20221206171253680](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221206171253680.png)
 
 7. 运行项目，终端会打印`Hello,world!`
 
