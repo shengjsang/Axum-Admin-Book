@@ -52,35 +52,42 @@
 
 6. 创建一个Rust的可执行程序
 
-   ```shell
-   cargo new --bin app
-   ```
+   1. 将`app`添加到项目**根目录**下的`Cargo.toml`  
 
-   ![image-20221206171035381](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221206171035381.png)
-
-7. 将`app`添加到项目**根目录**下的`Cargo.toml`  ![image-20221206171253680](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221206171253680.png)
 
    `Cargo.toml`
 
    ```toml
    [workspace]
    members = ["app"]
+   
+   [workspace.package]
+   authors = ["name <email>"]
+   edition = "2021"
+   license = "MIT"
+   publish = false
+   repository = ""
    ```
 
-8. 运行项目，终端会打印`Hello,world!`
+   ```shell
+   cargo new --bin app
+   ```
 
-  ```shell
-  cargo run --bin app	
-  ```
+   ![image-20221206171035381](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221206171035381.png)
 
-  ![image-20221206171400109](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221206171400109.png)
+   ![image-20221206171253680](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221206171253680.png)
 
-9. git提交
+7. 运行项目，终端会打印`Hello,world!`
 
-  ```shell
-  git add .
-  git commit -m "新增app"
-  ```
+   ```shell
+   cargo run --bin app	
+   ```
 
-  
+   ![image-20221206171400109](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221206171400109.png)
 
+8. git提交
+
+   ```shell
+   git add .
+   git commit -m "新增app"
+   ```

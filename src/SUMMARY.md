@@ -6,3 +6,4 @@
 - [前期准备](chapter_02/chapter_2_1.md)  
 - [实战第一战: 基础功能设计和开发](chapter_03/chapter_3.md)
   - [创建项目](chapter_03/chapter_3_create_project.md)
+  - [集成Axum](chapter_03/chapter_3_add_axum.md)
