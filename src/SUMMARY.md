@@ -9,3 +9,4 @@
   - [创建项目](chapter_03/create_project.md)
   - [集成Axum](chapter_03/add_axum.md)
   - [设计配置信息](chapter_03/config.md)
+  - [日志配置](chapter_03/log.md)
