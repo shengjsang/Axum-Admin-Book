@@ -56,7 +56,58 @@
 
 ## 代码
 
-1. `configs/config.rs`
+1. 创建`utils`库
+
+   ```shell
+   cargo new --lib utils
+   ```
+
+2. `Cargo.toml`
+
+   ```rust
+   [workspace]
+   members =[
+       "app",
+       "configs",
+       "utils"
+   ]
+   
+   [workspace.package]
+   authors = ["shengj.sang <shengj.sang@icloud.com>"]
+   edition = "2021"
+   license = "MIT"
+   publish = false
+   repository = ""
+   
+   
+   [workspace.dependencies]
+   # basic
+   serde = "1"
+   serde_json = "1"
+   
+   # web
+   axum = "0"
+   tokio = "1"
+   
+   # config
+   once_cell = "1"
+   toml = "0.5"
+   
+   
+   # time
+   time = "0.3"
+   chrono = "0"
+   
+   # log
+   tracing = "0.1"
+   tracing-appender = "0.2"
+   tracing-subscriber = "0.3"
+   
+   ```
+
+   
+
+3. `configs/config.rs`
 
    + 设计日志的相关配置信息
 
@@ -95,7 +146,7 @@
    }
    ```
 
-2. `Config.toml`
+4. `Config.toml`
 
    ```toml
    [server]
@@ -111,9 +162,7 @@
    
    ```
 
-   
-
-3. `utils/Cargo.toml`
+5. `utils/Cargo.toml`
 
    ```toml
    [package]
@@ -135,7 +184,7 @@
    
    ```
 
-4. `utils/log.rs`
+6. `utils/log.rs`
 
    ```rust
    use chrono::Local;
@@ -204,13 +253,13 @@
    
    ```
 
-5. `utils/lib.rs`
+7. `utils/lib.rs`
 
    ```rust
    pub mod log;
    ```
 
-6. `app/Cargo.toml`
+8. `app/Cargo.toml`
 
    ```rust
    [package]
@@ -230,7 +279,7 @@
    
    ```
 
-7. `app/main.rs`
+9. `app/main.rs`
 
    ```rust
    use std::net::SocketAddr;
@@ -258,6 +307,13 @@
            .unwrap();
    }
    
+   ```
+
+10. git提交
+
+   ```shell
+   git add .
+   git commit -m "新增log"
    ```
 
    

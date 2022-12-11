@@ -18,7 +18,7 @@ axum::Server::bind(&"0.0.0.0:3000".parse().unwrap())
 
 
 
-## 方案
+## 代码
 
 1. 创建一个`config`库，将我们的配置信息写入
 
