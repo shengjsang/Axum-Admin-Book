@@ -34,40 +34,15 @@
 
 
 
-## 代码
+## 库
 
-1. 创建一个utils库来实现我们的日志功能
+1. `tracing`
 
-   ```rust
-   cargo new --lib utils
-   ```
+   一个有范围的、结构化的日志和诊断系统
 
-2. `Cargo.toml`添加所需要的依赖项
+   异步编程中使用传统的日志是存在一些问题的，因为异步任务执行起来没有确定的顺序，输出的时候没有确定的逻辑顺序。
 
-   ```rust
-   chrono = "0"
-   time = "0.3"
-   tracing = "0.1"
-   tracing-appender = "0.2"
-   tracing-subscriber = "0.3"
-   ```
+   `tracing`引入了`span`概念，一个span代表了从开始到结束的一个时间段，在此期间的信息都可以记录。
 
-3. `utils/Cargo.toml`导入
+2. 
 
-   ```rust
-   [package]
-   name = "utils"
-   version = "0.1.0"
-   edition = "2021"
-   
-   # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-   
-   [dependencies]
-   chrono = { workspace = true}
-   time = { workspace = true }
-   tracing = { workspace = true }
-   tracing-appender = { workspace = true }
-   tracing-subscriber = { workspace = true }
-   ```
-
-4. 
