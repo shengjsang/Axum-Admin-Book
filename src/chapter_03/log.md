@@ -56,7 +56,64 @@
 
 ## 代码
 
-1. `utils/Cargo.toml`
+1. `configs/config.rs`
+
+   + 设计日志的相关配置信息
+
+   ```rust
+   use serde::Deserialize;
+   
+   /// 配置文件
+   #[derive(Debug, Deserialize)]
+   pub struct Configs {
+       /// 程序配置
+       pub server: Server,
+       /// 日志配置
+       pub log: Log,
+   }
+   
+   
+   /// server 配置文件
+   #[derive(Debug, Deserialize)]
+   pub struct Server {
+       /// 服务器名称
+       pub name: String,
+       /// 服务器(IP地址:端口)
+       /// `0.0.0.0:3000`
+       pub address: String,
+   }
+   
+   /// 日志配置
+   #[derive(Debug, Deserialize)]
+   pub struct Log {
+       /// `log_level` 日志输出等级
+       pub log_level: String,
+       /// `dir` 日志输出文件夹
+       pub dir: String,
+       /// `prefix` 日志输出文件前缀名
+       pub prefix: String,
+   }
+   ```
+
+2. `Config.toml`
+
+   ```toml
+   [server]
+   name = "Axum-Admin"
+   # 服务器IP:端口
+   address = "0.0.0.0:3000"
+   
+   [log]
+   dir = "logs"
+   prefix = "log"
+   # 日志级别  TRACE DEBUG  INFO  WARN ERROR
+   log_level = "DEBUG"
+   
+   ```
+
+   
+
+3. `utils/Cargo.toml`
 
    ```toml
    [package]
@@ -78,7 +135,7 @@
    
    ```
 
-2. `utils/log.rs`
+4. `utils/log.rs`
 
    ```rust
    use chrono::Local;
@@ -147,13 +204,13 @@
    
    ```
 
-3. `utils/lib.rs`
+5. `utils/lib.rs`
 
    ```rust
    pub mod log;
    ```
 
-4. `app/Cargo.toml`
+6. `app/Cargo.toml`
 
    ```rust
    [package]
@@ -173,7 +230,7 @@
    
    ```
 
-5. `app/main.rs`
+7. `app/main.rs`
 
    ```rust
    use std::net::SocketAddr;
