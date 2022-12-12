@@ -14,5 +14,5 @@ Axum-Admin是基于`Rust`语言来构建的一个管理员后台API程序框架�
   - [集成Axum](src/chapter_03/add_axum.md)
   - [设计配置信息](src/chapter_03/config.md)
   - [日志配置](src/chapter_03/log.md)
-  - [数据库配置](src/chapter_04/interface.md)
+  - [数据库配置](src/chapter_04/database.md)
   - [用户注册](src/chapter_04/user_register.md)
