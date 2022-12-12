@@ -437,14 +437,76 @@ sea-orm = "0"
      
      ```
 
-   6. git提交
+   
 
-      ```shell
-      git add .
-      git commit -m "数据库初始化"
+   6. 测试迁移功能
+
+      `migration/src/m20220101_000001_create_table.rs`
+
+      ```rust
+      use sea_orm_migration::prelude::*;
+      
+      #[derive(DeriveMigrationName)]
+      pub struct Migration;
+      
+      #[async_trait::async_trait]
+      impl MigrationTrait for Migration {
+          async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+              // Replace the sample below with your own migration scripts
+              // todo!();
+      
+              manager
+                  .create_table(
+                      Table::create()
+                          .table(Post::Table)
+                          .if_not_exists()
+                          .col(
+                              ColumnDef::new(Post::Id)
+                                  .integer()
+                                  .not_null()
+                                  .auto_increment()
+                                  .primary_key(),
+                          )
+                          .col(ColumnDef::new(Post::Title).string().not_null())
+                          .col(ColumnDef::new(Post::Text).string().not_null())
+                          .to_owned(),
+                  )
+                  .await
+          }
+      
+          async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+              // Replace the sample below with your own migration scripts
+              // todo!();
+      
+              manager
+                  .drop_table(Table::drop().table(Post::Table).to_owned())
+                  .await
+          }
+      }
+      
+      /// Learn more at https://docs.rs/sea-query#iden
+      #[derive(Iden)]
+      enum Post {
+          Table,
+          Id,
+          Title,
+          Text,
+      }
+      
       ```
 
-      
+      运行程序可以看到数据库里面已经自动帮我们记录了迁移记录和生成了我们想要的表
+
+      ![image-20221212170647116](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221212170647116.png)
+
+   7. git提交
+
+   ```shell
+   git add .
+   git commit -m "数据库初始化"
+   ```
+
+   
 
    
 
