@@ -10,3 +10,5 @@
   - [集成Axum](chapter_03/add_axum.md)
   - [设计配置信息](chapter_03/config.md)
   - [日志配置](chapter_03/log.md)
+- [实战第二站: API接口开发](chapter_04/interface.md)
+  - [用户注册](chapter_04/user_register.md)
