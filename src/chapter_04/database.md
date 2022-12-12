@@ -443,6 +443,8 @@ sea-orm = "0"
 
       `migration/src/m20220101_000001_create_table.rs`
 
+      + 自动帮我们生成的就已经存在一个测试的示例`Post`，我们只需要把`todo!()`去掉即可
+
       ```rust
       use sea_orm_migration::prelude::*;
       
@@ -501,10 +503,12 @@ sea-orm = "0"
 
    7. git提交
 
-   ```shell
-   git add .
-   git commit -m "数据库初始化"
-   ```
+      ```shell
+      git add .
+      git commit -m "数据库初始化"
+      ```
+
+      
 
    
 
