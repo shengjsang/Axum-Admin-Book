@@ -11,4 +11,6 @@
   - [日志配置](log.md)
 - [实战第二站: API接口开发](create_lib.md)
   - [数据库配置](database.md)
-  - [用户注册](user_register.md)
+  - [用户接口](user.md)
+    - [用户注册](user_register.md)
+    - [优化注册](refactor_user.md)
