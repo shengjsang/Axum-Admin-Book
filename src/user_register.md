@@ -62,9 +62,64 @@
 
 
 
-## 测试CRUD
+## 测试新增用户
 
-### api
+`Cargo.toml`
+
+```toml
+[workspace]
+members =[
+    "app",
+    "configs",
+    "utils",
+    "service",
+    "model",
+    "router",
+    "migration",
+    "api",
+]
+
+[workspace.package]
+authors = ["shengj.sang <shengj.sang@icloud.com>"]
+edition = "2021"
+license = "MIT"
+publish = false
+repository = ""
+
+
+[workspace.dependencies]
+# basic
+serde = "1"
+serde_json = "1"
+
+# web
+axum = "0"
+tokio = "1"
+
+# config
+once_cell = "1"
+toml = "0.5"
+
+
+# time
+time = "0.3"
+chrono = "0"
+
+# log
+tracing = "0.1"
+tracing-appender = "0.2"
+tracing-subscriber = "0.3"
+
+# sea-orm
+sea-orm = "0"
+
+anyhow = "1"
+
+```
+
+
+
+### Api
 
 `api/Cargo.toml`
 
@@ -117,7 +172,7 @@ pub mod user;
 
 
 
-### service
+### Service
 
 `service/Cargo.toml`
 
@@ -169,4 +224,93 @@ pub async fn register(db: &DatabaseConnection) -> Result<String> {
 ```rust
 pub mod user;
 ```
+
+
+
+### Router
+
+`router/Cargo.toml`
+
+```timl
+[package]
+name = "router"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+api = {path = "../api"}
+axum = {workspace = true}
+
+```
+
+`router/lib.rs`
+
+```rust
+use api::user::create;
+use axum::routing::get;
+use axum::Router;
+
+pub fn api() -> Router {
+    Router::new().nest("/user", user_api())
+}
+
+fn user_api() -> Router {
+    Router::new().route("/register", get(create)) // 注册
+}
+
+```
+
+
+
+### App
+
+`app/src/main.rs`
+
+```rust
+use axum::Router;
+use configs::CFG;
+use router::api;
+use std::net::SocketAddr;
+use std::str::FromStr;
+use tracing::info;
+use utils::log;
+
+#[tokio::main]
+async fn main() {
+    // 初始化日志
+    let _guard = log::init();
+    info!("Starting");
+
+    let app = Router::new().nest("/v1", api());
+
+    let addr = SocketAddr::from_str(&CFG.server.address).unwrap();
+    // 设置端口
+    axum::Server::bind(&addr)
+        // 服务启动
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
+}
+
+```
+
+
+
+### git提交
+
+```shell
+git add .
+git commit -m "新增user创建"
+```
+
+
+
+## 启动程序并发送请求
+
+![](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221218121802480.png)
+
+![image-20221218121824696](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221218121824696.png)
+
 
