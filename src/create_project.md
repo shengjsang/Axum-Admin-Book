@@ -53,7 +53,7 @@
 6. 创建一个Rust的可执行程序
 
    1. 将`app`添加到项目**根目录**下的`Cargo.toml`   
-   
+
    ```toml
    [workspace]
    members = ["app"]
@@ -65,9 +65,9 @@
    publish = false
    repository = ""
    ```
-   
+
    2. 创建项目
-   
+
    ```shell
    cargo new --bin app
    ```
@@ -80,7 +80,14 @@
 
    ![image-20221206171400109](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221206171400109.png)
 
-8. git提交
+8. 更改rust版本为`nightly`
+
+   ```shell
+   rustup toolchain install nightly
+   rustup override set nightly
+   ```
+
+9. git提交
 
    ```shell
    git add .

@@ -16,6 +16,11 @@
    DATABASE_URL=protocol://postgres:123456@localhost/ava
    ```
 
+   + `postgres` 用户名
+   + `123456` 密码
+   + `localhost` 数据库地址
+   + `ava` 数据库
+
    运行命令
 
    ```shell
@@ -59,9 +64,109 @@
 
 ## 测试CRUD
 
+### api
+
+`api/Cargo.toml`
+
+```toml
+[package]
+name = "api"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+utils = {path = "../utils"}
+service = {path = "../service"}
+model = {path = "../model"}
+sea-orm = {workspace = true}
+tokio = {workspace = true,default-features =false,  features = ["rt-multi-thread", "macros", "parking_lot", "signal"]}
+anyhow = {workspace = true}
+axum = {workspace = true}
+serde_json = {workspace = true}
+serde = {workspace = true}
+
+```
+
+`api/src/user/mod.rs`
+
+```rust
+use axum::Json;
+use serde_json::{json, Value};
+use service::user::register;
+use utils::db::{init, DB};
+
+pub async fn create() -> Json<Value> {
+    let db = DB.get_or_init(init).await;
+    let res = register(db).await;
+
+    match res {
+        Ok(_x) => Json(json!({"data": 200 })),
+        Err(_e) => Json(json!({"data": 404 })),
+    }
+}
+
+```
+
+`api/src/lib.rs`
+
+```rust
+pub mod user;
+```
 
 
 
+### service
 
+`service/Cargo.toml`
 
+```toml
+[package]
+name = "service"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+model = {path = "../model"}
+sea-orm = {workspace = true}
+tokio = {workspace = true,default-features =false,  features = ["rt-multi-thread", "macros", "parking_lot", "signal"]}
+anyhow = {workspace = true}
+serde_json = {workspace = true}
+serde = {workspace = true}
+
+```
+
+`service/src/user/mod.rs`
+
+```rust
+use anyhow::Result;
+use model::entity::user;
+use sea_orm::ActiveValue::Set;
+use sea_orm::DatabaseConnection;
+use sea_orm::EntityTrait;
+
+pub async fn register(db: &DatabaseConnection) -> Result<String> {
+    let user = user::ActiveModel {
+        id: Set("1".to_string()),
+        username: Set("jack".to_string()),
+        phone: Set("+861234567809".to_string()),
+        email: Set("123456@qq.cim".to_string()),
+        password: Set("123456".to_string()),
+    };
+
+    user::Entity::insert(user).exec(db).await?;
+
+    Ok("用户添加成功".to_string())
+}
+
+```
+
+`service/src/lib.rs`
+
+```rust
+pub mod user;
+```
 

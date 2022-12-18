@@ -1,16 +1,20 @@
 ## 创建相关库
 
-1. 创建`Router`库
+1. 创建`Api`库
 
    HTTP API 接口的具体实现，主要用来做 HTTP 请求的解包、参数校验、业务逻辑处理、返回。这里的业务逻辑处理应该是轻量级的。
-2. 创建`Service`库
+2. 创建`Router库`
+
+   将不同权限的API汇总收集。
+3. 创建`Service`库
 
    存放应用复杂业务处理代码。
-3. 创建`Model`库
+4. 创建`Model`库
 
    存放和数据库交互的代码。
 
    ```shell
+   cargo new --lib api
    cargo new --lib router
    cargo new --lib service
    cargo new --lib model
@@ -29,6 +33,8 @@
        "service",
        "model",
        "router",
+       "api",
+         
    ]
    
    [workspace.package]
