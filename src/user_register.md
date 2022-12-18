@@ -314,3 +314,11 @@ git commit -m "新增user创建"
 ![image-20221218121824696](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221218121824696.png)
 
 
+
+## 将User表存储
+
+![image-20221218122247490](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221218122247490.png)
+
+存储到`migration/sql/`下
+
+![image-20221218122319153](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221218122319153.png)
