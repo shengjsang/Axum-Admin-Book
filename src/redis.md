@@ -87,3 +87,91 @@ redis = "0.22.0"
 
 ```
 
+
+
+## Utils
+
+`utils/Cargo.toml`
+
+```rust
+[package]
+name = "utils"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+configs = {path = "../configs"}
+# time
+chrono = { workspace = true}
+time = { workspace = true }
+# log
+tracing = { workspace = true }
+tracing-appender = { workspace = true }
+tracing-subscriber = {workspace = true,default-features =false,  features = ["json", "env-filter", "local-time", "registry"]}
+# db
+sea-orm = { workspace = true,  features = ["macros", "runtime-tokio-rustls", "with-chrono","sqlx-postgres"] }
+tokio = {workspace = true}
+once_cell = {workspace = true}
+redis = {workspace = true, features = ["tokio-comp"] }
+
+```
+
+`utils/src/redis.rs`
+
+```rust
+use redis::aio::Connection;
+use redis::{Client, RedisResult};
+use tracing::info;
+
+pub async fn connect() -> RedisResult<Connection> {
+    let client = Client::open("redis://localhost")?;
+    let mut con = client.get_tokio_connection().await?;
+    let res: String = redis::Cmd::new()
+        .arg("Ping")
+        .query_async(&mut con)
+        .await
+        .unwrap();
+    info!("Redis Ping {}", res);
+    Ok(con)
+}
+
+```
+
+
+
+## App
+
+```rust
+use axum::Router;
+use configs::CFG;
+use router::api;
+use std::net::SocketAddr;
+use std::str::FromStr;
+use tracing::info;
+use utils::{log, redis};
+
+#[tokio::main]
+async fn main() {
+    // 初始化日志
+    let _guard = log::init();
+    info!("Starting");
+
+    // 连接Redis
+    let _con = redis::connect().await.unwrap();
+    info!("Redis Connect");
+
+    let app = Router::new().nest("/v1", api());
+
+    let addr = SocketAddr::from_str(&CFG.server.address).unwrap();
+    // 设置端口
+    axum::Server::bind(&addr)
+        // 服务启动
+        .serve(app.into_make_service())
+        .await
+        .unwrap();
+}
+
+```
+
