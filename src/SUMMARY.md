@@ -15,4 +15,4 @@
     - [用户注册](user_register.md)
     - [优化注册](refactor_user.md)
     - [Redis](redis.md)
-    - [验证码和密码加密](captcha.md)
+    - [验证码](captcha.md)

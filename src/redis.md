@@ -118,6 +118,14 @@ redis = {workspace = true, features = ["tokio-comp"] }
 
 ```
 
+`utils/src/lib.rs`
+
+```rust
+pub mod db;
+pub mod log;
+pub mod redis;
+```
+
 `utils/src/redis.rs`
 
 ```rust
@@ -137,6 +145,24 @@ pub async fn connect() -> RedisResult<Connection> {
     Ok(con)
 }
 
+pub async fn set(con: &mut Connection, key: &str, value: &str, expire: u32) -> RedisResult<()> {
+    redis::Cmd::new()
+        .arg("Set")
+        .arg(key)
+        .arg(value)
+        .query_async(con)
+        .await?;
+
+    redis::Cmd::new()
+        .arg("Expire")
+        .arg(key)
+        .arg(expire)
+        .query_async(con)
+        .await?;
+
+    Ok(())
+}
+
 ```
 
 
@@ -150,7 +176,7 @@ use router::api;
 use std::net::SocketAddr;
 use std::str::FromStr;
 use tracing::info;
-use utils::{log, redis};
+use utils::{captcha, log, redis};
 
 #[tokio::main]
 async fn main() {
@@ -162,6 +188,7 @@ async fn main() {
     let _con = redis::connect().await.unwrap();
     info!("Redis Connect");
 
+ 
     let app = Router::new().nest("/v1", api());
 
     let addr = SocketAddr::from_str(&CFG.server.address).unwrap();
@@ -173,5 +200,14 @@ async fn main() {
         .unwrap();
 }
 
+```
+
+
+
+## git提交
+
+```shell
+git add .
+git commit -m "集成redis"
 ```
 
