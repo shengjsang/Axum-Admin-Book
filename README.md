@@ -16,3 +16,6 @@ Axum-Admin是基于`Rust`语言来构建的一个管理员后台API程序框架�
   - [日志配置](src/log.md)
   - [数据库配置](src/database.md)
   - [用户注册](src/user_register.md)
+  - [优化注册](src/refactor_user.md)
+  - [Redis](src/redis.md)
+  - [验证码](src/captcha.md)
