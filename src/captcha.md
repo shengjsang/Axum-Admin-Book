@@ -125,6 +125,7 @@ pub mod redis;
 + 设置混淆点
 + 宽高
 + 将验证码图片转为base64返回给前端
++ 设置验证码过期时间
 
 ```rust
 use crate::redis::{connect, set};
@@ -133,7 +134,21 @@ use captcha::filters::Noise;
 use captcha::Captcha;
 use rand::Rng;
 
-pub async fn new() -> Result<()> {
+pub async fn new() -> Result<(String, String)> {
+    let (captcha_id, captcha_code, captcha_img) = generate();
+    let mut con = connect().await?;
+    set(
+        &mut con,
+        captcha_id.as_str(),
+        captcha_code.as_str(),
+        60 * 15,
+    )
+    .await?;
+
+    Ok((captcha_id, captcha_img))
+}
+
+pub fn generate() -> (String, String, String) {
     const CHARSET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZ\
                             abcdefghijklmnopqrstuvwxyz\
                             0123456789";
@@ -149,21 +164,13 @@ pub async fn new() -> Result<()> {
 
     let mut captcha = Captcha::new();
     let captcha_code = captcha.add_chars(6).chars_as_string();
-    let _captcha_img = captcha
+    let captcha_img = captcha
         .apply_filter(Noise::new(0.5))
         .view(220, 80)
         .as_base64()
         .expect("captcha  create failed");
-    let mut con = connect().await.unwrap();
-    set(
-        &mut con,
-        captcha_id.as_str(),
-        captcha_code.as_str(),
-        60 * 15,
-    )
-    .await
-    .unwrap();
-    Ok(())
+
+    (captcha_id, captcha_code, captcha_img)
 }
 
 ```
@@ -212,4 +219,140 @@ async fn main() {
 
 ![image-20221226161053467](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221226161053467.png)
 
-![image-20221226165405489](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221226165405489.png)
+![image-20221227172135016](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221227172135016.png)
+
+
+
+## git提交
+
+```shell
+git add .
+git commit -m "添加验证码"
+```
+
+
+
+## 图片验证码接口
+
+上面我们已经将验证码生成，并存储进Redis，接下来我们就要讲生成的验证码图片返回给前端使用
+
+
+
+### Model
+
+`model/src/common/response/mod.rs`
+
+```rust
+use serde::Serialize;
+
+/// 验证码响应
+#[derive(Debug, Serialize, Default)]
+pub struct Captcha {
+    pub captcha_id: Option<String>,
+    pub captcha_image: Option<String>,
+}
+
+```
+
+
+
+`model/src/common/mod.rs`
+
+```rust
+pub mod response;
+```
+
+
+
+`model/src/lib.rs`
+
+```rust
+pub mod common;
+pub mod entity;
+pub mod response;
+pub mod user;
+```
+
+
+
+### API
+
+`api/src/common/mod.rs`
+
+```rust
+use model::common::response::Captcha;
+use model::response::Res;
+
+pub async fn show_captcha() -> Res<Captcha> {
+    let res = utils::captcha::new().await;
+    match res {
+        Ok((captcha_id, captcha_image)) => Res::ok_with_data(Captcha {
+            captcha_id: Some(captcha_id),
+            captcha_image: Some(captcha_image),
+        }),
+        Err(e) => Res::error_with_msg(500, e.to_string()),
+    }
+}
+
+```
+
+
+
+`api/src/lib.rs`
+
+```rust
+pub mod common;
+pub mod user;
+```
+
+
+
+### Router
+
+```rust
+use api::common::show_captcha;
+use api::user::create;
+use axum::routing::post;
+use axum::Router;
+
+pub fn api() -> Router {
+    // 嵌套path 方便我们对不同的功能进行细分和管理
+    Router::new()
+        .nest("/user", user_api()) //  /user/register
+        .nest("/common", captcha_api())
+}
+
+fn user_api() -> Router {
+    Router::new().route("/register", post(create)) // 注册
+}
+
+fn captcha_api() -> Router {
+    Router::new().route("/show-captcha", post(show_captcha))
+}
+```
+
+
+
+## 测试
+
+1. 发送请求
+
+   ![image-20221227183841032](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221227183841032.png)
+
+2. 查看验证码
+
+   ![image-20221227183905162](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221227183905162.png)
+
+3. base64-img
+
+   ![image-20221227183929954](https://repo-1256831547.cos.ap-shanghai.myqcloud.com/image-20221227183929954.png)
+
+
+
+## git提交
+
+```shell
+git add .
+git commit -m "添加验证码请求"
+```
+

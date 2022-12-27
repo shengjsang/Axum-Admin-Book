@@ -128,6 +128,9 @@ pub mod redis;
 
 `utils/src/redis.rs`
 
+1. Redis连接功能
+2. Set功能
+
 ```rust
 use redis::aio::Connection;
 use redis::{Client, RedisResult};
