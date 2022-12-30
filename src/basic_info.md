@@ -1,4 +1,9 @@
-# Rust
+# 项目介绍
+`Axum-Next-Admin`是一个前后端分离的实战项目，在这个实战项目中，我们会学到企业级Web开发中所需要用的大部分知识，知识也比较新，后端选择的`Rust`语言，Web框架则是`tokio`的`Axum`Web开发框架，前端选择的是`React`的`Next`。
+
+
+
+## Rust
 
 官方对`Rust`语言的定义是**一种使每个人都能 构建可靠、高效软件的语言。**
 
@@ -11,7 +16,7 @@
 
 
 
-# Axum
+## Axum
 
 `Axum`是`tokio`官方出的一个优秀的web开发框架。它集成了`tokio`和`hyper`一起使用，而且充分利用了中间件、服务和实用程序的生态系统[`tower`](https://crates.io/crates/tower)，[`tower-http`](https://crates.io/crates/tower-http)。
 
@@ -25,5 +30,7 @@
 
 
 
+## Next
 
+`Next.js` 为您提供生产所需的所有功能的最佳开发人员体验：混合静态和服务器渲染、TypeScript 支持、智能捆绑、路由预取等。无需配置。
 

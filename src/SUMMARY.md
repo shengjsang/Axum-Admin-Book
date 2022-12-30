@@ -16,3 +16,5 @@
     - [优化注册](refactor_user.md)
     - [Redis](redis.md)
     - [验证码](captcha.md)
+    - [密码加密](password.md)
+    - [优化Redis和验证码](refactor_redis_captcha.md)
