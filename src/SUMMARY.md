@@ -18,3 +18,4 @@
     - [验证码](captcha.md)
     - [密码加密](password.md)
     - [优化Redis和验证码](refactor_redis_captcha.md)
+  - [系统信息](system_info.md)
